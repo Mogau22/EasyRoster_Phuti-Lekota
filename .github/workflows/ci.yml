@@ -31,5 +31,5 @@ jobs:
       - name: Verify Angular workspace exists
         run: test -f package.json || (echo "Generate the Angular workspace before enabling frontend CI." && exit 1)
       - run: npm ci
-      - run: npm test -- --watch=false
+      - run: npm test -- --watch=false --browsers=ChromeHeadless
       - run: npm run build
