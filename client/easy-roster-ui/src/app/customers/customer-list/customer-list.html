@@ -1,0 +1,193 @@
+<div class="customer-page">
+  <div class="customer-card">
+
+    <!-- Header -->
+    <div class="header">
+      <div>
+        <h1>Customers</h1>
+        <p>View and manage EasyRoster customers.</p>
+      </div>
+
+      <button
+        type="button"
+        class="btn-primary create-button"
+        (click)="createCustomer()">
+        + Create Customer
+      </button>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="search">
+
+        <input
+          type="text"
+          [(ngModel)]="search"
+          (keyup.enter)="searchCustomers()"
+          placeholder="Search customers..."
+        />
+
+        <button
+          type="button"
+          class="btn-primary"
+          (click)="searchCustomers()">
+          Search
+        </button>
+
+        @if (search) {
+          <button
+            type="button"
+            class="btn-secondary"
+            (click)="clearSearch()">
+            Clear
+          </button>
+        }
+
+      </div>
+    </div>
+
+    <!-- Loading -->
+    @if (isLoading) {
+      <div class="state">
+        <div class="spinner"></div>
+        <p>Loading customers...</p>
+      </div>
+    }
+
+    <!-- Error -->
+    @if (errorMessage && !isLoading) {
+      <div class="error-message">
+
+        <span>
+          {{ errorMessage }}
+        </span>
+
+        <button
+          type="button"
+          (click)="loadCustomers()">
+          Try again
+        </button>
+
+      </div>
+    }
+
+    <!-- Empty State -->
+    @if (
+      !isLoading &&
+      !errorMessage &&
+      customers.length === 0
+    ) {
+      <div class="state">
+
+        <h3>No customers found</h3>
+
+        <p>
+          @if (search) {
+            There are no customers matching your search.
+          } @else {
+            No customers have been created yet.
+          }
+        </p>
+
+        @if (!search) {
+          <button
+            type="button"
+            class="btn-primary"
+            (click)="createCustomer()">
+            Create Customer
+          </button>
+        }
+
+      </div>
+    }
+
+    <!-- Customer Table -->
+    @if (
+      !isLoading &&
+      !errorMessage &&
+      customers.length > 0
+    ) {
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Type</th>
+              <th>Email</th>
+              <th>Cellphone</th>
+              <th>Invoice Total</th>
+              <th class="actions-column">
+                Actions
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (customer of customers; track customer.id) {
+
+              <tr>
+
+                <td>
+                  <div class="customer-name">
+                    {{ customer.firstName }}
+                    {{ customer.surname }}
+                  </div>
+                </td>
+
+                <td>
+                  <span class="type-badge">
+                    {{ customer.type }}
+                  </span>
+                </td>
+
+                <td>
+                  {{ customer.email }}
+                </td>
+
+                <td>
+                  {{ customer.cellphone }}
+                </td>
+
+                <td class="amount">
+                  {{
+                    customer.amountTotal
+                      | currency:'ZAR':'symbol-narrow'
+                  }}
+                </td>
+
+                <td class="actions">
+
+                  <button
+                    type="button"
+                    class="action-button"
+                    (click)="editCustomer(customer)">
+                    Edit
+                  </button>
+
+                  <button
+                    type="button"
+                    class="action-button delete"
+                    (click)="deleteCustomer(customer)">
+                    Delete
+                  </button>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    }
+
+  </div>
+</div>

@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - run: dotnet restore api/EasyRoster.Api.Tests/EasyRoster.Api.Tests.csproj
+      - run: dotnet build api/EasyRoster.Api.Tests/EasyRoster.Api.Tests.csproj --no-restore --configuration Release
+      - run: dotnet test api/EasyRoster.Api.Tests/EasyRoster.Api.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage"
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client/easy-roster-ui
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Verify Angular workspace exists
+        run: test -f package.json || (echo "Generate the Angular workspace before enabling frontend CI." && exit 1)
+      - run: npm ci
+      - run: npm test -- --watch=false
+      - run: npm run build

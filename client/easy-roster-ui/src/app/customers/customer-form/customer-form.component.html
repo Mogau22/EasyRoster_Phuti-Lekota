@@ -1,0 +1,169 @@
+<div class="page">
+  <div class="card">
+
+    <div class="header">
+      <h1>
+        {{ isEditMode ? 'Edit Customer' : 'Create Customer' }}
+      </h1>
+
+      <p>
+        {{
+          isEditMode
+            ? 'Update the customer details below.'
+            : 'Enter the customer details below.'
+        }}
+      </p>
+    </div>
+
+    <form
+      [formGroup]="customerForm"
+      (ngSubmit)="submit()">
+
+      <div class="form-grid">
+
+        <!-- Customer Type -->
+        <div class="form-group full-width">
+          <label for="type">Customer Type</label>
+
+          <select
+            id="type"
+            formControlName="type">
+
+            <option value="Person">Person</option>
+            <option value="Company">Company</option>
+
+          </select>
+        </div>
+
+        <!-- First Name -->
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+
+          <input
+            id="firstName"
+            type="text"
+            formControlName="firstName"
+            placeholder="Enter first name">
+
+          @if (firstName.invalid && firstName.touched) {
+            <span class="validation-message">
+              First name is required.
+            </span>
+          }
+        </div>
+
+        <!-- Surname -->
+        <div class="form-group">
+          <label for="surname">Surname</label>
+
+          <input
+            id="surname"
+            type="text"
+            formControlName="surname"
+            placeholder="Enter surname">
+
+          @if (surname.invalid && surname.touched) {
+            <span class="validation-message">
+              Surname is required.
+            </span>
+          }
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Email</label>
+
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="name@example.com">
+
+          @if (email.invalid && email.touched) {
+            <span class="validation-message">
+              Enter a valid email address.
+            </span>
+          }
+        </div>
+
+        <!-- Cellphone -->
+        <div class="form-group">
+          <label for="cellphone">Cellphone</label>
+
+          <input
+            id="cellphone"
+            type="text"
+            formControlName="cellphone"
+            placeholder="Enter cellphone number">
+
+          @if (cellphone.invalid && cellphone.touched) {
+            <span class="validation-message">
+              Cellphone is required.
+            </span>
+          }
+        </div>
+
+        <!-- Amount -->
+        <div class="form-group full-width">
+          <label for="amountTotal">Amount Total</label>
+
+          <input
+            id="amountTotal"
+            type="number"
+            formControlName="amountTotal"
+            min="0">
+
+          @if (amountTotal.invalid && amountTotal.touched) {
+            <span class="validation-message">
+              Amount must be zero or greater.
+            </span>
+          }
+        </div>
+
+      </div>
+
+      <!-- Success -->
+      @if (successMessage) {
+        <div class="success-message">
+          {{ successMessage }}
+        </div>
+      }
+
+      <!-- Error -->
+      @if (errorMessage) {
+        <div class="error-message">
+          {{ errorMessage }}
+        </div>
+      }
+
+      <!-- Actions -->
+      <div class="actions">
+
+        
+          <button
+            type="button"
+            class="secondary-button"
+            [disabled]="isSubmitting"
+            (click)="cancel()">
+            Cancel
+          </button>
+        
+
+        <button
+          type="submit"
+          [disabled]="customerForm.invalid || isSubmitting">
+
+          @if (isSubmitting) {
+            {{ isEditMode ? 'Updating...' : 'Creating...' }}
+          } @else {
+            {{ isEditMode ? 'Update Customer' : 'Create Customer' }}
+          }
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+</div>
